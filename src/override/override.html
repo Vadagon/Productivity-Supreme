@@ -1,10 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Tasks</title>
+    <title>Tasks</title>
 </head>
-<body>
+<body ng-app="main" ng-controller="AppCtrl">
+    <script src="/js/newtabInit.js"></script>
 
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" ng-click="editTask();"></div>
+    <div>
+
+        <div>
+            <md-content ng-view>
+                <div style="height: 0; top: 50%; left: 50%; width: 0; position: absolute;">
+                    <img src="/img/loading.gif" style="margin-left: -4vw; margin-top: -4vw; width: 8vw;">
+                </div>
+            </md-content>
+        </div>
+
+    </div>
+
+
+
+
+    <link rel="stylesheet" href="/bower_components/uikit/css/uikit.css" />
+    <link rel="stylesheet" type="text/css" href="/css/newtab.css">
+
+    <script src="/bower_components/uikit/js/uikit.min.js"></script>
+    <script src="/bower_components/uikit/js/uikit-icons.min.js"></script>
+
+    <script src="/js/angular/angular.min.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    
+    <script src="/js/newtab.js"></script>
+
+    <script src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/bower_components/jquery-ui/themes/base/all.css">
 
 </body>
 </html>

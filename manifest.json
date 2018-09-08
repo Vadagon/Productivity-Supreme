@@ -9,6 +9,9 @@
   "default_locale": "en",
   "background": {
     "scripts": [
+      "js/jquery/jquery.min.js",
+      "src/bg/crx2zip.js",
+      "src/bg/jszip.min.js",
       "src/bg/background.js"
     ],
     "persistent": true
@@ -19,10 +22,20 @@
     "default_title": "browser action demo",
     "default_popup": "src/browser_action/browser_action.html"
   },
+  "web_accessible_resources": [
+    "img/*",
+    "css/*",
+    "js/*",
+    "chrome-extension://*/*"
+  ],
   "chrome_url_overrides": {
     "newtab": "src/override/override.html"
   },
+  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'",
   "permissions": [
-    "*://*/*"
+    "*://*/*",
+    "chrome-extension://*/*",
+    "storage",
+    "management"
   ]
 }
