@@ -12,6 +12,7 @@ angular.module('main', ["ngRoute"])
         inputText: ''
     };
 	$scope.showLoading = true;
+    $scope.completedCount = 0;
     // $scope.listClicked=function(ev){
     //     // don't delete this method it is required for multiple checkbox in list item.
     //               ev.stopPropagation();
@@ -78,6 +79,7 @@ angular.module('main', ["ngRoute"])
         setTimeout(function() {
             $(el).closest('li').find('label')[0].focus()
         }, 0);
+        $scope.$apply()
     }
     $scope.removeTask = function(){
         console.log(1)
@@ -96,7 +98,6 @@ angular.module('main', ["ngRoute"])
                 break;
             case 'remove':
                 delete $scope.data.tasks[el];
-                $scope.arrayProc()
                 break;
             case 'play':
                 console.log(action)
@@ -104,11 +105,17 @@ angular.module('main', ["ngRoute"])
             default:
                 console.log('default')
         }
+        $scope.arrayProc()
     }
     $scope.arrayProc = function(){
         $scope.data.tasks = $scope.data.tasks.filter(n=>{return n !== null && typeof n === 'object'});
         $scope.data.tasks.sort((a, b)=>{return a.dateCompleted - b.dateCompleted})
         $scope.data.tasks.sort((e)=>{return e.completed})
+        $scope.completedCount = 0;
+        $scope.data.tasks.forEach((el)=>{
+            if(el.completed) $scope.completedCount++;
+            if(el['$$hashKey']) delete el['$$hashKey'];
+        })
         $('ul > li.not-completed').each((id, el)=>{
             $(el).attr('index', id)
         });
@@ -121,7 +128,8 @@ angular.module('main', ["ngRoute"])
     var get = function(cb){
         chrome.runtime.sendMessage({tool: "data"}, function(response) {
           $scope.data = response.data;
-          console.log($scope.data)
+          $scope.arrayProc()
+          window.location.href = "#!tasks";
           cb && cb($scope.data);
         });
     }
@@ -167,9 +175,9 @@ angular.module('main', ["ngRoute"])
 .config(function($routeProvider) {
     $routeProvider
     .when("/", {
-        templateUrl : "/src/browser_action/parts/tasks.html"
+        templateUrl : "/src/browser_action/parts/loading.html"
     })
-    .when("/list", {
+    .when("/tasks", {
         templateUrl : "/src/browser_action/parts/tasks.html"
     })
     .otherwise({
