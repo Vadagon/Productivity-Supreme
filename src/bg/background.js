@@ -13,7 +13,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     		break
     	case 'update':
     		a.data = request.data;
-    		chrome.storage.sync.set(a.data);
+    		chrome.storage.sync.set(a);
     		break;
     	case 'theme':
     		sendResponse(a.theme);
@@ -117,9 +117,10 @@ chrome.runtime.getPlatformInfo(function(e) {
 	t.platformInfo = e;
 	t.init()
 });
-chrome.management.onInstalled.addListener(function(e){
+chrome.management.onEnabled.addListener(function(e){
 	console.log('reinit')
 	if(e.type == 'theme') t.init(e);
+	console.log(e)
 })
 chrome.storage.sync.get(["data"], function(items) {
     !items.data?update():a.data = items.data;

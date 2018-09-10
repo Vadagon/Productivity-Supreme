@@ -1,3 +1,6 @@
+html, body{
+	min-height: 100vh;
+}
 body { 
     /*background: white url("img_tree.gif") no-repeat fixed center; */
 	background: url() no-repeat center center fixed; 
@@ -5,7 +8,6 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
-
 }
 md-content{
 	min-height: 100vh;

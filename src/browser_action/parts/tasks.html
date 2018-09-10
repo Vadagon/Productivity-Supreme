@@ -39,7 +39,7 @@
 
 
 	    <ul class="uk-list uk-list-striped">
-	        <li class="ui-state-disableded input" ng-click="editTask();"><input ng-model="app.inputText" type="text" placeholder="Add your data.tasks..." ng-keypress="addTask($event)"><img src="/img/add.png" ng-click="addTask()"></li>
+	        <li class="ui-state-disableded input" ng-click="editTask();"><input ng-model="app.inputText" type="text" placeholder="Write your next task here..." ng-keypress="addTask($event)"><img src="/img/add.png" ng-click="addTask()"></li>
 	        <li class="not-completed {{x.editable?'ui-state-disableded':''}}" ng-repeat="x in data.tasks" index="{{$index}}" ng-if="!x.completed" ng-click="x.editable?0:editTask();">
 	        	<span class="task-mark" style="border-color: rgba(216, 0, 39, {{1/data.tasks.length*(data.tasks.length-$index)}})"><img src="/img/play.png"></span>
 	        	<label ng-init="x.editable=!1;" contenteditable="{{x.editable}}" ng-bind="x.text" ng-click="x.editable?0:x.completed=!0; x.dateCompleted = Date.now(); arrayProc();"></label>
@@ -55,7 +55,7 @@
 	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', $index)">
 	        	</span>
 	        </li>
-	        <li ng-if="!data.tasks.length">No tasks! You are free today.</li>
+	        <li ng-if="!data.tasks.length">No tasks! Add one right now.</li>
 	        <button ng-hide="completedCount < 3" style="margin: 0 !important;" class="uk-button uk-button-default uk-width-1-1 uk-margin-small-bottom uk-button-small" ng-click="limitToX=='d'?limitToX=2:limitToX = 'd'; editTask();">{{limitToX=='d'?'Hide':'View All'}}</button>
 	    </ul>
 	</div>
