@@ -1,0 +1,24 @@
+<div class="uk-position-center uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-2@s uk-width-1" uk-grid>
+	<div ng-init="window.ddd = date; window.ddd.setSeconds ( date.getSeconds() + window.flow.timing );" uk-countdown="date: {{window.ddd.toString()}}" class="uk-text-center">
+	    <span class="uk-countdown-number uk-countdown-hours"></span>
+	    <span class="uk-countdown-separator">:</span>
+	    <span class="uk-countdown-number uk-countdown-minutes"></span>
+	    <span class="uk-countdown-separator">:</span>
+	    <span class="uk-countdown-number uk-countdown-seconds"></span>
+	</div>
+	<h5 class="uk-heading-line uk-text-center uk-text-muted">
+		<span ng-if="!window.paused">{{window.task.text}}</span>
+		<span ng-if="window.paused">Be here at {{window.ddd.getHours()}}:{{window.ddd.getMinutes()}}</span>
+	</h5>
+	<div uk-margin class="uk-text-center" style="padding-bottom: 10vh;">
+	    <button class="uk-button uk-button-{{window.paused?'primary':'secondary'}}" ng-click="task2('pause');">{{window.paused?'Resume':'Pause'}}</button>
+	    <button class="uk-button uk-button-danger" ng-click="task2('stop')">Stop</button>
+	    <div class="uk-inline">
+	    	<button class="uk-button uk-button-primary" ng-click="task2('done', window.task)">Done</button>
+	        <button class="uk-button uk-button-default" type="button">Next</button>
+        	<ul class="uk-nav uk-dropdown-nav uk-text-left" uk-dropdown="mode: click;">
+		        <li ng-repeat="x in data.tasks" ng-if="!x.completed"><a href="#">{{x.text}}</a></li>
+		    </ul>
+	    </div>
+	</div>
+</div>

@@ -7,16 +7,30 @@
 
 //example of using a message handler from the inject scripts
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+	console.log(request)
     switch(request.tool){
     	case 'data':
-    		sendResponse({data: a.data});
-    		break
+    		sendResponse({data: a.data, ...p.data});
+    		break;
+    	case 'flow':
+    		sendResponse(p.data)
+    		break;
     	case 'update':
     		a.data = request.data;
     		chrome.storage.sync.set(a);
     		break;
     	case 'theme':
     		sendResponse(a.theme);
+    		break;
+    	case 'play':
+    		p.play();
+			p.data.taskNum = request.taskNum;
+    		break;
+    	case 'pause':
+    		p.pause();
+    		break;
+    	case 'stop':
+    		p.stop();
     		break;
     	default:
     		console.log('default')
@@ -25,12 +39,20 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 
+var d = {
+}
 
 // application
 var a = {
 	theme: {},
 	data: {
-		tasks: []
+		tasks: [],
+		flow: {
+		    work: 52 * 60,
+		    pause: 17 * 60,
+		    delay: 4 * 60
+		},
+	    sounds: !1
 	}
 }
 
@@ -111,21 +133,78 @@ var t =  {
 				if(el.type == 'theme') return t.load(el);
 			})
 		})
+	},
+	theme: function(){
+		chrome.runtime.getPlatformInfo(function(e) {
+			t.platformInfo = e;
+			t.init()
+		});
+		chrome.management.onEnabled.addListener(function(e){
+			console.log('reinit')
+			if(e.type == 'theme') t.init(e);
+			console.log(e)
+		})
 	}
 }
-chrome.runtime.getPlatformInfo(function(e) {
-	t.platformInfo = e;
-	t.init()
-});
-chrome.management.onEnabled.addListener(function(e){
-	console.log('reinit')
-	if(e.type == 'theme') t.init(e);
-	console.log(e)
-})
+var p = {
+	data: {
+	    taskNum: 0,
+	    timing: 0,
+	    state: 0
+	},
+    timer: !1,
+	play: function(e) {
+        // p.timer = setTimeout(function() {
+        //     // p.souna.data.flow.play();
+        //     // p.notify(2)
+        // }, a.data.flow.work);
+        p.data.state = 'play'
+        p.data.timing = a.data.flow.work;
+        p.setBadge()
+    },
+    pause: function() {
+        p.data.state = 'pause'
+        p.data.timing = a.data.flow.pause;
+        p.setBadge()
+    },
+    stop: function(){
+    	p.data.state = 0;
+        p.setBadge()
+    },
+	setIcon: function(e = !1){
+        var icon = p.data.state?p.data.state:'stop';
+        icon = e?e:icon
+        chrome.browserAction.setIcon({ path: 'images/' + icon + '.png' })
+    },
+    setBadge: function(e = !1) {
+        p.setIcon(e)
+        if (p.badgeTime)
+            clearInterval(p.badgeTime)
+        p.badgeTime = setInterval(function() {
+            if (!p.data.timing || p.data.timing < 0 || !p.data.state) {
+                chrome.browserAction.setBadgeText({ text: '' })
+            } else {
+                p.data.timing--;
+                var time2Show = Math.floor(p.data.timing / 60)
+                var seccontds = (p.data.timing - time2Show*60)
+                seccontds = seccontds<10?'0'+seccontds:seccontds
+                time2Show = time2Show + ':' + seccontds
+                time2Show = p.data.timing<0?'':time2Show
+                chrome.browserAction.setBadgeText({ text: time2Show })
+            }
+        }, 1000);
+    }
+}
+
+p.stop()
+t.theme()
+
 chrome.storage.sync.get(["data"], function(items) {
     !items.data?update():a.data = items.data;
+	p.data.state = 0;
+
 });
 function update(){
 	chrome.runtime.sendMessage({tool: "updated", data: a.data})
-	chrome.storage.sync.set(a.data);
+	chrome.storage.sync.set(a);
 }

@@ -9,6 +9,7 @@
   "default_locale": "en",
   "background": {
     "scripts": [
+      "js/plugins.js",
       "js/jquery/jquery.min.js",
       "src/bg/crx2zip.js",
       "src/bg/jszip.min.js",
@@ -24,6 +25,7 @@
   },
   "web_accessible_resources": [
     "img/*",
+    "images/*",
     "css/*",
     "js/*",
     "chrome-extension://*/*"

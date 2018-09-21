@@ -122,3 +122,14 @@ li.input img:hover{
 [contenteditable="true"]:active, [contenteditable="true"]:focus{
 	outline: none;
 }
+
+
+.options{
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 25px 30px;
+}
+.options svg{
+	width: 30px;
+}

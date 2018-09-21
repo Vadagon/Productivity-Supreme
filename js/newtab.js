@@ -3,9 +3,11 @@ angular.module('main', ["ngRoute"])
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|blob:chrome-extension):/);
 }])
 .controller('AppCtrl', function($scope,$location) {
+    window.location.href = "#!loading";
     $scope.data = {
         tasks: []
     };
+    $scope.window = window;
     $scope.theme = {};
     $scope.Date = Date;
     $scope.app = {
@@ -72,7 +74,7 @@ angular.module('main', ["ngRoute"])
     }
     $scope.editTask = function(x, el){
         $scope.data.tasks.forEach(function(e){
-            e.editable = !1;
+            e.editable = !1; 
         })
         if(!x) return;
         $(el).closest('li').find('label')[0].contenteditable = "true";
@@ -90,26 +92,52 @@ angular.module('main', ["ngRoute"])
                 $scope.data.tasks.forEach(function(e){
                     e.editable = !1;
                 })
-                if(!el) break;
+                if(!el){
+                    $scope.arrayProc()
+                    break;
+                } 
                 $(ell).closest('li').find('label')[0].contenteditable = "true";
                 setTimeout(function() {
                     $(ell).closest('li').find('label')[0].focus()
                 }, 0);
                 break;
+            case 'editing':
+                ell.textContent = ell.textContent.replace(/(?:\r\n|\r|\n|<br>)/g, '');
+                el.text = ell.textContent;
+                break;
             case 'remove':
                 delete $scope.data.tasks[el];
                 break;
             case 'play':
-                console.log(action)
+                $scope.window.task = el;
+                $scope.window.flow.timing = $scope.data.flow.work;
+                set({tool: action, taskNum: $scope.data.tasks.indexOf(el)})
+                window.location.href = "#!play";
+                break;
+            case 'pause':
+                $scope.window.paused = !$scope.window.paused;
+                $scope.window.ddd = new Date();
+                $scope.window.ddd.setSeconds ( $scope.window.ddd.getSeconds() + ($scope.window.paused?$scope.window.flow.pause:$scope.window.flow.work) );
+                $scope.window.paused?set('pause'):set({tool: 'play', taskNum: $scope.data.tasks.indexOf($scope.window.task)})
+                break;
+            case 'stop':
+                set(action)
+                window.location.href = '#!tasks';
+                break;
+            case 'done':
+                set('stop')
+                el.editable?0:el.completed=!0; 
+                el.dateCompleted = Date.now(); 
+                $scope.arrayProc();
+                window.location.href = '#!tasks';
                 break;
             default:
                 console.log('default')
         }
-        $scope.arrayProc()
     }
     $scope.arrayProc = function(){
         $scope.data.tasks = $scope.data.tasks.filter(n=>{return n !== null && typeof n === 'object'});
-        $scope.data.tasks.sort((a, b)=>{return a.dateCompleted - b.dateCompleted})
+        $scope.data.tasks.sort((a, b)=>{return a.completed?a.dateCompleted - b.dateCompleted:!1})
         $scope.data.tasks.sort((e)=>{return e.completed})
         $scope.completedCount = 0;
         $scope.data.tasks.forEach((el)=>{
@@ -119,21 +147,32 @@ angular.module('main', ["ngRoute"])
         $('ul > li.not-completed').each((id, el)=>{
             $(el).attr('index', id)
         });
-        set()
-        console.log($scope.data.tasks)
+        set('update')
     }
     var set = function(e, cb){
-        chrome.runtime.sendMessage({tool: "update", data: $scope.data});
-    }
-    var get = function(cb){
-        chrome.runtime.sendMessage({tool: "data"}, function(response) {
-          $scope.data = response.data;
-          $scope.arrayProc()
-          window.location.href = "#!tasks";
-          cb && cb($scope.data);
+        var a = {data: $scope.data};
+        typeof e == 'string' ? a.tool = e : a = Object.assign(a, e);
+        chrome.runtime.sendMessage(a, function(response){
+          cb && cb(response);
         });
     }
-    get();
+    set('data', (data)=>{
+        $scope.data = data.data;
+        $scope.window.flow = data.data.flow;
+        $scope.arrayProc()
+        console.log(data)
+        if(!data.state){
+            window.location.href = "#!tasks";
+        }else{
+            set('flow', (e)=>{
+                console.log(e)
+                $scope.window.flow = Object.assign($scope.window.flow, e);
+                $scope.window.task = $scope.data.tasks[e.taskNum]
+                $scope.window.paused = ($scope.window.flow.state === 'pause');
+                window.location.href = "#!play";
+            })
+        } 
+    });
 
 
 
@@ -174,13 +213,19 @@ angular.module('main', ["ngRoute"])
 })
 .config(function($routeProvider) {
     $routeProvider
-    .when("/", {
-        templateUrl : "/src/browser_action/parts/loading.html"
-    })
     .when("/tasks", {
         templateUrl : "/src/browser_action/parts/tasks.html"
     })
-    .otherwise({
+    .when("/play", {
+        templateUrl : "/src/browser_action/parts/play.html"
+    })
+    .when("/settings", {
+        templateUrl : "/src/browser_action/parts/settings.html"
+    })
+    .when("/loading", {
         templateUrl : "/src/browser_action/parts/loading.html"
+    })
+    .otherwise({
+        redirectTo: '/loading'
     });
 });
