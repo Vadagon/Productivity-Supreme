@@ -46,10 +46,15 @@ var d = {
 var a = {
 	theme: {},
 	data: {
-		tasks: [],
+		tasks: [
+			{completed: false,
+			dateCompleted: 1537724386568,
+			dateCreated: 1537724386568,
+			text: "ewq"}
+		],
 		flow: {
-		    work: 52 * 60,
-		    pause: 17 * 60,
+		    work: 1 * 3,
+		    pause: 7 * 60,
 		    delay: 4 * 60
 		},
 	    sounds: !1
@@ -182,7 +187,7 @@ var p = {
             clearInterval(p.badgeTime)
         p.badgeTime = setInterval(function() {
             if (!p.data.timing || p.data.timing < 0 || !p.data.state) {
-                chrome.browserAction.setBadgeText({ text: '' })
+            	p.switch()
             } else {
                 p.data.timing--;
                 var time2Show = Math.floor(p.data.timing / 60)
@@ -193,18 +198,40 @@ var p = {
                 chrome.browserAction.setBadgeText({ text: time2Show })
             }
         }, 1000);
+    },
+    switch: function(){
+        chrome.browserAction.setBadgeText({ text: '' })
+    	if(p.data.state){
+    		if(p.data.state=='play'){
+    			p.sound.play()
+    			console.log('paused')
+    			p.pause()
+    			update('reload')
+    		}else{
+    			p.data.state = 0;
+    		}
+    	} 
     }
 }
 
+
+
 p.stop()
 t.theme()
+chrome.browserAction.setBadgeBackgroundColor({color: '#404040'})
+p.sound = new Howl({
+  src: ['sounds/def1.mp3'],
+  volume: 1
+});
+
 
 chrome.storage.sync.get(["data"], function(items) {
-    !items.data?update():a.data = items.data;
+    // !items.data?update('updated'):a.data = items.data;
+    update('updated');
 	p.data.state = 0;
 
 });
-function update(){
-	chrome.runtime.sendMessage({tool: "updated", data: a.data})
+function update(e){
+	chrome.runtime.sendMessage({tool: e, data: a.data})
 	chrome.storage.sync.set(a);
 }

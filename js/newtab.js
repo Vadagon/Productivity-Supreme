@@ -3,7 +3,6 @@ angular.module('main', ["ngRoute"])
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|blob:chrome-extension):/);
 }])
 .controller('AppCtrl', function($scope,$location) {
-    window.location.href = "#!loading";
     $scope.data = {
         tasks: []
     };
@@ -13,8 +12,17 @@ angular.module('main', ["ngRoute"])
     $scope.app = {
         inputText: ''
     };
-	$scope.showLoading = true;
+    $scope.showLoading = true;
     $scope.completedCount = 0;
+
+
+    $scope.redirectTo = redirectTo = function(e){
+        console.log($scope.window.settingsOnly)
+        if(!$scope.window.settingsOnly) 
+            window.location.href = '#!'+e;
+    }
+    $scope.window.settingsOnly = window.location.href.includes('#!/settings')?!0:!1;
+    redirectTo("loading");
     // $scope.listClicked=function(ev){
     //     // don't delete this method it is required for multiple checkbox in list item.
     //               ev.stopPropagation();
@@ -102,17 +110,19 @@ angular.module('main', ["ngRoute"])
                 }, 0);
                 break;
             case 'editing':
+                if(/<br>/ig.test(ell.innerHTML)) $scope.editTask();
                 ell.textContent = ell.textContent.replace(/(?:\r\n|\r|\n|<br>)/g, '');
                 el.text = ell.textContent;
                 break;
             case 'remove':
                 delete $scope.data.tasks[el];
+                $scope.arrayProc();
                 break;
             case 'play':
                 $scope.window.task = el;
                 $scope.window.flow.timing = $scope.data.flow.work;
                 set({tool: action, taskNum: $scope.data.tasks.indexOf(el)})
-                window.location.href = "#!play";
+                redirectTo("play");
                 break;
             case 'pause':
                 $scope.window.paused = !$scope.window.paused;
@@ -122,14 +132,14 @@ angular.module('main', ["ngRoute"])
                 break;
             case 'stop':
                 set(action)
-                window.location.href = '#!tasks';
+                redirectTo('tasks');
                 break;
             case 'done':
                 set('stop')
                 el.editable?0:el.completed=!0; 
                 el.dateCompleted = Date.now(); 
                 $scope.arrayProc();
-                window.location.href = '#!tasks';
+                redirectTo('tasks');
                 break;
             default:
                 console.log('default')
@@ -153,6 +163,7 @@ angular.module('main', ["ngRoute"])
         var a = {data: $scope.data};
         typeof e == 'string' ? a.tool = e : a = Object.assign(a, e);
         chrome.runtime.sendMessage(a, function(response){
+            console.log(a, ' | ', response)
           cb && cb(response);
         });
     }
@@ -162,14 +173,14 @@ angular.module('main', ["ngRoute"])
         $scope.arrayProc()
         console.log(data)
         if(!data.state){
-            window.location.href = "#!tasks";
+            redirectTo("tasks");
         }else{
             set('flow', (e)=>{
                 console.log(e)
                 $scope.window.flow = Object.assign($scope.window.flow, e);
                 $scope.window.task = $scope.data.tasks[e.taskNum]
                 $scope.window.paused = ($scope.window.flow.state === 'pause');
-                window.location.href = "#!play";
+                redirectTo("play");
             })
         } 
     });
@@ -193,8 +204,11 @@ angular.module('main', ["ngRoute"])
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         switch(request.tool){
-            case 'update':
+            case 'updated':
                 $scope.data = request.data;
+                break;
+            case 'reload':
+                location.reload();
                 break;
             default:
                 console.log('default')
