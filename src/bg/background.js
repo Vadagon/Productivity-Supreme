@@ -53,8 +53,8 @@ var a = {
 			// text: "ewq"}
 		],
 		flow: {
-		    work: 1 * 3,
-		    pause: 7 * 60,
+		    work: 25 * 60,
+		    pause: 5 * 60,
 		    delay: 4 * 60
 		},
 	    sounds: !0,
@@ -206,7 +206,7 @@ var p = {
     		if(p.data.state=='play'){
     			if(a.data.sounds) p.sound.play()
 				if(a.data.newtab) 
-					chrome.tabs.query({url: "chrome-extension://"+chrome.runtime.id+"/src/override/*", windowType: "normal"}, function(e){
+					chrome.tabs.query({url: ["chrome-extension://"+chrome.runtime.id+"/src/override/*", "chrome://newtab/"], windowType: "normal"}, function(e){
 						if(!e.length) chrome.tabs.create({url: 'src/override/override.html', active: !0})
 					})
 				if(!a.data.newtab) 
