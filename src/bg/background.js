@@ -47,10 +47,10 @@ var a = {
 	theme: {},
 	data: {
 		tasks: [
-			{completed: false,
-			dateCompleted: 1537724386568,
-			dateCreated: 1537724386568,
-			text: "ewq"}
+			// {completed: false,
+			// dateCompleted: 1537724386568,
+			// dateCreated: 1537724386568,
+			// text: "ewq"}
 		],
 		flow: {
 		    work: 1 * 3,
@@ -230,8 +230,8 @@ p.sound = new Howl({
 
 
 chrome.storage.sync.get(["data"], function(items) {
-    // !items.data?update('updated'):a.data = items.data;
-    update('updated');
+    !items.data?update('updated'):a.data = items.data;
+    // update('updated');
 	p.data.state = 0;
 
 });

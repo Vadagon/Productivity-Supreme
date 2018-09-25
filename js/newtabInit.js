@@ -1,10 +1,9 @@
-
 chrome.runtime.sendMessage({tool: 'data'}, function(res){
-	if(!res.data.newtab && !window.location.href.includes('#!/settings')) chrome.tabs.update({url: 'chrome-search://local-ntp/local-ntp.html'});
+	if(!res.data.newtab && !window.location.href.includes('#!/settings') && document.body.clientWidth > 700) chrome.tabs.update({url: 'chrome-search://local-ntp/local-ntp.html'});
 });
 
 var x;
-if(document.body.clientWidth > 800)
+if(document.body.clientWidth > 700)
 	chrome.runtime.sendMessage({tool: "theme"}, function(res) {
 		x = res;
 		console.log(x)

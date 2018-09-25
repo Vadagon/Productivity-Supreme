@@ -1,10 +1,10 @@
 {
   "name": "Productivity Supreme",
-  "version": "0.8.1",
+  "version": "0.9.1",
   "manifest_version": 2,
   "description": "Do job 2x faster! Plan tasks to work on and focus smartly on them.",
   "icons": {
-    "128": "icons/icon.png"
+    "128": "images/play.png"
   },
   "offline_enabled": true,
   "default_locale": "en",
@@ -20,7 +20,7 @@
   },
   "options_page": "src/override/override.html#!/settings",
   "browser_action": {
-    "default_icon": "icons/icon.png",
+    "default_icon": "images/play.png",
     "default_title": "browser action demo",
     "default_popup": "src/override/override.html"
   },
