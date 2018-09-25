@@ -57,7 +57,8 @@ var a = {
 		    pause: 7 * 60,
 		    delay: 4 * 60
 		},
-	    sounds: !1
+	    sounds: !0,
+	    newtab: !0
 	}
 }
 
@@ -203,8 +204,13 @@ var p = {
         chrome.browserAction.setBadgeText({ text: '' })
     	if(p.data.state){
     		if(p.data.state=='play'){
-    			p.sound.play()
-    			console.log('paused')
+    			if(a.data.sounds) p.sound.play()
+				if(a.data.newtab) 
+					chrome.tabs.query({url: "chrome-extension://"+chrome.runtime.id+"/src/override/*", windowType: "normal"}, function(e){
+						if(!e.length) chrome.tabs.create({url: 'src/override/override.html', active: !0})
+					})
+				if(!a.data.newtab) 
+					chrome.tabs.create({url: 'src/override/override.html', active: !0})
     			p.pause()
     			update('reload')
     		}else{
@@ -213,8 +219,6 @@ var p = {
     	} 
     }
 }
-
-
 
 p.stop()
 t.theme()

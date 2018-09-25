@@ -39,6 +39,7 @@
     "*://*/*",
     "chrome-extension://*/*",
     "storage",
-    "management"
+    "management",
+    "tabs"
   ]
 }

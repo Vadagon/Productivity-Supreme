@@ -7,6 +7,7 @@ angular.module('main', ["ngRoute"])
         tasks: []
     };
     $scope.window = window;
+    $scope.window.settings = {}
     $scope.theme = {};
     $scope.Date = Date;
     $scope.app = {
@@ -17,25 +18,14 @@ angular.module('main', ["ngRoute"])
 
 
     $scope.redirectTo = redirectTo = function(e){
-        console.log($scope.window.settingsOnly)
         if(!$scope.window.settingsOnly) 
             window.location.href = '#!'+e;
+        else
+            window.location.href = '#!settings';
     }
     $scope.window.settingsOnly = window.location.href.includes('#!/settings')?!0:!1;
-    redirectTo("loading");
-    // $scope.listClicked=function(ev){
-    //     // don't delete this method it is required for multiple checkbox in list item.
-    //               ev.stopPropagation();
-    // };
-    // $scope.data.tasks = [
-    //     {text: 'test2', completed: !1, dateCreated: Date.now(), dateCompleted: Date.now()},
-    //     {text: 'test1', completed: !1, dateCreated: Date.now(), dateCompleted: Date.now()},
-    //     {text: 'test3', completed: !0, dateCreated: Date.now(), dateCompleted: Date.now()},
-    //     {text: 'test4', completed: !1, dateCreated: Date.now(), dateCompleted: Date.now()},
-    //     {text: 'test5', completed: !1, dateCreated: Date.now(), dateCompleted: Date.now()},
-    //     {text: 'test6', completed: !0, dateCreated: Date.now(), dateCompleted: Date.now()}
-    // ];
-    // $scope.data.tasks.sort((e)=>{return e.completed})
+    window.location.href = '#!loading';
+
     $scope.listInit = function(){
         $('ul').sortable({
             forcePlaceholderSize: true,
@@ -145,6 +135,16 @@ angular.module('main', ["ngRoute"])
                 console.log('default')
         }
     }
+    $scope.save = function(){
+        let tasks = $scope.data.tasks
+        $scope.data = angular.copy($scope.window.settings);
+        $scope.data.tasks = tasks;
+        Object.keys($scope.data.flow).forEach(function(key) {
+          $scope.data.flow[key] = $scope.data.flow[key]*60;
+        });
+        set('update')
+        UIkit.notification({message: "<span uk-icon='icon: check'></span> Updated", status: 'primary'});
+    }
     $scope.arrayProc = function(){
         $scope.data.tasks = $scope.data.tasks.filter(n=>{return n !== null && typeof n === 'object'});
         $scope.data.tasks.sort((a, b)=>{return a.completed?a.dateCompleted - b.dateCompleted:!1})
@@ -170,8 +170,11 @@ angular.module('main', ["ngRoute"])
     set('data', (data)=>{
         $scope.data = data.data;
         $scope.window.flow = data.data.flow;
+        $scope.window.settings = angular.copy($scope.data);
+        Object.keys($scope.window.settings.flow).forEach(function(key) {
+          $scope.window.settings.flow[key] = $scope.window.settings.flow[key]/60;
+        });
         $scope.arrayProc()
-        console.log(data)
         if(!data.state){
             redirectTo("tasks");
         }else{

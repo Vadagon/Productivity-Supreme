@@ -1,6 +1,35 @@
 <div class="uk-flex-center uk-padding" uk-grid>
 	<div class="uk-width-1-3@xl uk-width-2-5@l uk-width-1-2@m uk-width-1-2@s uk-width-1">
-		settings in development
+		<h1 class="uk-heading-divider">Options</h1>
+		<form class="uk-margin-large">
+		    <div class="uk-margin" uk-grid>
+		    	<div class="uk-width-1-2@s">
+			        <label class="uk-form-label" for="form-horizontal-text">Working minutes</label>
+			        <div class="uk-form-controls">
+			            <input class="uk-input" id="form-horizontal-text" ng-model="window.settings.flow.work" type="number" placeholder="52">
+			        </div>
+			    </div>
+			    <div class="uk-width-1-2@s">
+			        <label class="uk-form-label" for="form-horizontal-text">Pause minutes</label>
+			        <div class="uk-form-controls">
+			            <input class="uk-input" id="form-horizontal-text" ng-model="window.settings.flow.pause" type="number" placeholder="15">
+			        </div>
+			    </div>
+		    </div>
+
+		    <div class="uk-margin">
+		    	<label><input class="uk-checkbox" type="checkbox" ng-model="window.settings.sounds" checked> Sound notification</label>
+		    </div>
+		    <div class="uk-margin">
+		    	<label><input class="uk-checkbox" type="checkbox" ng-model="window.settings.newtab" checked> Customized new tab</label>
+		    </div>
+		    <br>
+		    <hr>
+		    <div class="uk-margin">
+		    	<button class="uk-button uk-button-primary" type="button" ng-click="save()">Save</button>
+		    </div>
+
+		</form>
 	</div>
 </div>
 
