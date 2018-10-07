@@ -24,6 +24,34 @@
 
 
 
+    <div id="modal-overflow" uk-modal style="display: none;">
+        <div class="uk-modal-dialog">
+
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">HOW TO USE IT</h2>
+            </div>
+
+            <div class="uk-modal-body" uk-overflow-auto>
+
+                <ul class="uk-list uk-list-bullet" style="box-shadow: none; border: none !important;">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                </ul>
+
+            </div>
+
+            <div class="uk-modal-footer uk-text-right">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+                <button class="uk-button uk-button-primary uk-modal-close" ng-click="window.chrome.storage.sync.set({questionMark: !0}); window.questionMark = !0;" type="button">I have read</button>
+            </div>
+
+        </div>
+    </div>
+    
+
     <link rel="stylesheet" href="/bower_components/uikit/css/uikit.css" />
     <link rel="stylesheet" type="text/css" href="/css/newtab.css">
 

@@ -7,6 +7,7 @@ angular.module('main', ["ngRoute"])
         tasks: []
     };
     $scope.window = window;
+    $scope.window.questionMark = !0;
     $scope.window.settings = {}
     $scope.theme = {};
     $scope.Date = Date;
@@ -176,7 +177,10 @@ angular.module('main', ["ngRoute"])
         });
         $scope.arrayProc()
         if(!data.state){
-            redirectTo("tasks");
+            redirectTo('tasks');
+            chrome.storage.sync.get(["questionMark"], function(items) {
+                $scope.window.questionMark = items.questionMark;
+            });
         }else{
             set('flow', (e)=>{
                 console.log(e)
@@ -187,6 +191,7 @@ angular.module('main', ["ngRoute"])
             })
         } 
     });
+
 
 
 

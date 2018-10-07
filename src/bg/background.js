@@ -221,7 +221,7 @@ var p = {
 }
 
 p.stop()
-t.theme()
+// t.theme()
 chrome.browserAction.setBadgeBackgroundColor({color: '#404040'})
 p.sound = new Howl({
   src: ['sounds/def1.mp3'],
