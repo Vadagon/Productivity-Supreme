@@ -31,6 +31,7 @@ angular.module('main', ["ngRoute"])
         $('ul').sortable({
             forcePlaceholderSize: true,
             axis: 'y',
+            handle: "span.task-mark",
             placeholder: "li-hightlight",
             items: "li:not(.ui-state-disableded)",
             cancel: "li.ui-state-disableded",
@@ -101,12 +102,10 @@ angular.module('main', ["ngRoute"])
                 }, 0);
                 break;
             case 'editing':
-                if(/<br>/ig.test(ell.innerHTML)) $scope.editTask();
-                ell.textContent = ell.textContent.replace(/(?:\r\n|\r|\n|<br>)/g, '');
-                el.text = ell.textContent;
+
                 break;
             case 'remove':
-                delete $scope.data.tasks[el];
+                delete $scope.data.tasks[$scope.data.tasks.indexOf(el)];
                 $scope.arrayProc();
                 break;
             case 'play':
@@ -118,7 +117,7 @@ angular.module('main', ["ngRoute"])
             case 'pause':
                 $scope.window.paused = !$scope.window.paused;
                 $scope.window.ddd = new Date();
-                $scope.window.ddd.setSeconds ( $scope.window.ddd.getSeconds() + ($scope.window.paused?$scope.window.flow.pause:$scope.window.flow.work) );
+                $scope.window.ddd.setSeconds ( $scope.window.ddd.getSeconds() + ($scope.window.paused?$scope.data.flow.pause:$scope.data.flow.work));
                 $scope.window.paused?set('pause'):set({tool: 'play', taskNum: $scope.data.tasks.indexOf($scope.window.task)})
                 break;
             case 'stop':
@@ -199,7 +198,7 @@ angular.module('main', ["ngRoute"])
 
     $scope.date = {};
     setInterval(() => {processDate(); $scope.$apply();}, 1000);
-    var monthsArray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; 
+    var monthsArray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     processDate()
     function processDate(){
         $scope.date = new Date();

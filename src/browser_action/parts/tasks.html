@@ -31,8 +31,7 @@
 </md-list>
 <button ng-click="limitToX=='d'?limitToX=2:limitToX = 'd'">{{limitToX=='d'?'Hide':'View All'}}</button> -->
 <!-- |{{theme.colors.frame | join}}| -->
-<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" ng-click="editTask();"></div>
-<div class="uk-flex-center uk-padding" uk-grid ng-init="listInit(); limitToX = 2;">
+<div class="uk-flex-center uk-padding tasks-tab" uk-grid ng-init="listInit(); limitToX = 2;">
 	<div class="uk-width-1-3@xl uk-width-2-5@l uk-width-1-2@m uk-width-1-2@s uk-width-1">
 
 		<h2 class="uk-text-center"><span>{{date.dayOfWeek}} {{date.day}} {{date.month}}</span></h2>
@@ -40,24 +39,31 @@
 
 
 	    <ul class="uk-list uk-list-striped">
-	        <li class="ui-state-disableded input" ng-click="editTask();"><input ng-model="app.inputText" type="text" placeholder="Write your next task here..." ng-keypress="addTask($event)"><img src="/img/add.png" ng-click="addTask()"></li>
-	        <li class="not-completed {{x.editable?'ui-state-disableded':''}}" ng-repeat="x in data.tasks" index="{{$index}}" ng-if="!x.completed" ng-click="x.editable?0:editTask();">
-	        	<span class="task-mark" style="border-color: rgba(216, 0, 39, {{1/data.tasks.length*(data.tasks.length-$index)}})"><img src="/img/play.png"></span>
-	        	<label ng-init="x.editable=!1;" contenteditable="{{x.editable}}" ng-bind="x.text" ng-keyup="task2('editing', x, $event.currentTarget)" ng-click="task2('done', x)"></label>
+	        <li class="ui-state-disableded input"><input class="ng-pristine123" ng-model="app.inputText" type="text" placeholder="Write your next task here..." ng-keypress="addTask($event)">
+	        	<!-- <img src="/img/add.png" ng-click="addTask()"> -->
+    			<a uk-icon="icon: plus"></a>
+	        </li>
+	        <li class="not-completed {{x.editable?'ui-state-disableded':''}}" ng-repeat="x in data.tasks" index="{{$index}}" ng-if="!x.completed">
+	        	<span class="task-mark">
+    				<a href="#!/settings" uk-icon="icon: more-vertical"></a>
+	        	</span>
+	        	<input class="uk-checkbox" type="checkbox" ng-model="x.completed" ng-checked="arrayProc()">
+	        	<input type="text" ng-model="x.text" ng-keyup="arrayProc()">
 	        	<span class="task-options">
 	        		<img src="/img/play.png" ng-click="task2('play', x, $index)">
-	        		<img src="/img/edit.png" ng-click="task2('edit', x, $event.currentTarget); x.editable=!0;">
-	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', $index)">
+	        		<!-- <img src="/img/edit.png" ng-click="task2('edit', x, $event.currentTarget); x.editable=!0;"> -->
+	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', x)">
 	        	</span>
 	        </li>    
-	        <li ng-repeat="x in data.tasks | filter: filterNormal | limitTo:limitToX" index="{{$index}}" ng-if="x.completed" class="ui-state-disableded completed" ng-click="x.editable?0:editTask();">
+	        <li ng-repeat="x in data.tasks | filter: filterNormal | limitTo:limitToX" index="{{$index}}" ng-if="x.completed" class="ui-state-disableded completed">
+	        	<input class="uk-checkbox" type="checkbox" ng-model="x.completed">
 	        	<label ng-init="x.editable=!1;" ng-click="x.completed=!1; arrayProc();">{{x.text}}</label>
 	        	<span class="task-options">
-	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', $index)">
+	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', x)">
 	        	</span>
 	        </li>
 	        <li ng-if="!data.tasks.length">No tasks! Add one right now.</li>
-	        <button ng-hide="completedCount < 3" style="margin: 0 !important;" class="uk-button uk-button-default uk-width-1-1 uk-margin-small-bottom uk-button-small" ng-click="limitToX=='d'?limitToX=2:limitToX = 'd'; editTask();">{{limitToX=='d'?'Hide':'View All'}}</button>
+	        <button ng-hide="completedCount < 3" style="margin: 0 !important;" class="uk-button uk-button-default uk-width-1-1 uk-margin-small-bottom uk-button-small" ng-click="limitToX=='d'?limitToX=2:limitToX = 'd';">{{limitToX=='d'?'Hide':'View All'}}</button>
 	    </ul>
 		<!-- <button style="position: relative;" class="uk-button uk-button-default" ng-click="window.UIkit.modal(window.$('#modal-overflow')[0]).show()">Open</button> -->
 	</div>

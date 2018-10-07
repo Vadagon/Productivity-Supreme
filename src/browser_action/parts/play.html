@@ -19,7 +19,7 @@
 	    	<button class="uk-button uk-button-primary" ng-click="task2('done', window.task)">Done</button>
 	        <button class="uk-button uk-button-default" type="button">Next</button>
         	<ul class="uk-nav uk-dropdown-nav uk-text-left" uk-dropdown="mode: click;">
-		        <li ng-repeat="x in data.tasks" ng-if="!x.completed"><a href="#">{{x.text}}</a></li>
+		        <li ng-repeat="x in data.tasks" ng-if="!x.completed && x.text != window.task.text"><a ng-click="task2('done', window.task); task2('play', x); ">{{x.text}}</a></li>
 		    </ul>
 	    </div>
 	</div>
