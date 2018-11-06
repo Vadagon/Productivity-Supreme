@@ -1,6 +1,6 @@
 {
   "name": "Productivity Supreme",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "manifest_version": 2,
   "description": "Do job 2x faster! Plan tasks to work on and focus smartly on them.",
   "icons": {
@@ -34,7 +34,6 @@
   "chrome_url_overrides": {
     "newtab": "src/override/override.html"
   },
-  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'",
   "permissions": [
     "*://*/*",
     "chrome-extension://*/*",
