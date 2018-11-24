@@ -50,7 +50,7 @@
 	        	<input class="uk-checkbox" type="checkbox" ng-model="x.completed" ng-checked="arrayProc()">
 	        	<input type="text" ng-model="x.text" ng-keyup="arrayProc()">
 	        	<span class="task-options">
-	        		<img src="/img/play.png" ng-click="task2('play', x, $index)">
+	        		<im	g src="/img/play.png" ng-click="task2('play', x, $index)">
 	        		<!-- <img src="/img/edit.png" ng-click="task2('edit', x, $event.currentTarget); x.editable=!0;"> -->
 	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', x)">
 	        	</span>
@@ -62,7 +62,7 @@
 	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', x)">
 	        	</span>
 	        </li>
-	        <li ng-if="!data.tasks.length">No tasks! ЙЛЙЛЙЛAdd one right now.</li>
+	        <li ng-if="!data.tasks.length">No tasks! Add one right now.</li>
 	        <button ng-hide="completedCount < 3" style="margin: 0 !important;" class="uk-button uk-button-default uk-width-1-1 uk-margin-small-bottom uk-button-small" ng-click="limitToX=='d'?limitToX=2:limitToX = 'd';">{{limitToX=='d'?'Hide':'View All'}}</button>
 	    </ul>
 		<!-- <button style="position: relative;" class="uk-button uk-button-default" ng-click="window.UIkit.modal(window.$('#modal-overflow')[0]).show()">Open</button> -->
