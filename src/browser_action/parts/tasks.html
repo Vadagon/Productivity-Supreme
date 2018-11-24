@@ -62,7 +62,7 @@
 	        		<img class="removTask" src="/img/cancel.png" ng-click="task2('remove', x)">
 	        	</span>
 	        </li>
-	        <li ng-if="!data.tasks.length">No tasks! Add one right now.</li>
+	        <li ng-if="!data.tasks.length">No tasks! ЙЛЙЛЙЛAdd one right now.</li>
 	        <button ng-hide="completedCount < 3" style="margin: 0 !important;" class="uk-button uk-button-default uk-width-1-1 uk-margin-small-bottom uk-button-small" ng-click="limitToX=='d'?limitToX=2:limitToX = 'd';">{{limitToX=='d'?'Hide':'View All'}}</button>
 	    </ul>
 		<!-- <button style="position: relative;" class="uk-button uk-button-default" ng-click="window.UIkit.modal(window.$('#modal-overflow')[0]).show()">Open</button> -->
