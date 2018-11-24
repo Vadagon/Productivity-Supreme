@@ -139,3 +139,28 @@ li.input a:hover{
 .options svg{
 	width: 30px;
 }
+
+
+
+@media only screen and (max-width: 659px) {
+
+	
+	html{width: 639px;}
+    .uk-padding {
+    padding: 30px;
+    box-sizing: border-box;
+    width: 100%;
+}
+.uk-grid {
+    margin-left: 0;
+}
+
+.uk-list > li > :last-child{
+	color: #000;
+	    opacity: 1;
+}
+
+.uk-grid > * {
+    padding-left: 0;
+}
+}
