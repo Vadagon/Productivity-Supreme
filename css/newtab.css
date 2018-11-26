@@ -140,16 +140,20 @@ li.input a:hover{
 	width: 30px;
 }
 
-
-
-@media only screen and (max-width: 659px) {
-
+@media only screen and (max-width: 640px) {
 	
-	html{width: 639px;}
+html{
+	display: flex;
+    justify-content: center;
+    margin: 0;
+}
     .uk-padding {
     padding: 30px;
     box-sizing: border-box;
     width: 100%;
+}
+body{
+	min-width: 500px;
 }
 .uk-grid {
     margin-left: 0;
